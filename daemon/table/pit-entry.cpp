@@ -33,7 +33,7 @@ const Name Entry::LOCALHOST_NAME("ndn:/localhost");
 const Name Entry::LOCALHOP_NAME("ndn:/localhop");
 
 Entry::Entry(const Interest& interest)
-  : m_interest(interest.shared_from_this())
+    : m_congMark(false), m_nackMark(false), m_interest(interest.shared_from_this())
 {
 }
 
@@ -47,7 +47,7 @@ bool
 Entry::hasLocalInRecord() const
 {
   return std::any_of(m_inRecords.begin(), m_inRecords.end(),
-                     [] (const InRecord& inRecord) { return inRecord.getFace()->isLocal(); });
+      [] (const InRecord& inRecord) {return inRecord.getFace()->isLocal();});
 }
 
 bool
@@ -56,17 +56,17 @@ Entry::canForwardTo(const Face& face) const
   time::steady_clock::TimePoint now = time::steady_clock::now();
 
   bool hasUnexpiredOutRecord = std::any_of(m_outRecords.begin(), m_outRecords.end(),
-    [&face, &now] (const OutRecord& outRecord) {
-      return outRecord.getFace().get() == &face && outRecord.getExpiry() >= now;
-    });
+      [&face, &now] (const OutRecord& outRecord) {
+        return outRecord.getFace().get() == &face && outRecord.getExpiry() >= now;
+      });
   if (hasUnexpiredOutRecord) {
     return false;
   }
 
   bool hasUnexpiredOtherInRecord = std::any_of(m_inRecords.begin(), m_inRecords.end(),
-    [&face, &now] (const InRecord& inRecord) {
-      return inRecord.getFace().get() != &face && inRecord.getExpiry() >= now;
-    });
+      [&face, &now] (const InRecord& inRecord) {
+        return inRecord.getFace().get() != &face && inRecord.getExpiry() >= now;
+      });
   if (!hasUnexpiredOtherInRecord) {
     return false;
   }
@@ -78,16 +78,14 @@ bool
 Entry::violatesScope(const Face& face) const
 {
   // /localhost scope
-  bool isViolatingLocalhost = !face.isLocal() &&
-                              LOCALHOST_NAME.isPrefixOf(this->getName());
+  bool isViolatingLocalhost = !face.isLocal() && LOCALHOST_NAME.isPrefixOf(this->getName());
   if (isViolatingLocalhost) {
     return true;
   }
 
   // /localhop scope
-  bool isViolatingLocalhop = !face.isLocal() &&
-                             LOCALHOP_NAME.isPrefixOf(this->getName()) &&
-                             !this->hasLocalInRecord();
+  bool isViolatingLocalhop = !face.isLocal() && LOCALHOP_NAME.isPrefixOf(this->getName())
+      && !this->hasLocalInRecord();
   if (isViolatingLocalhop) {
     return true;
   }
@@ -131,7 +129,7 @@ InRecordCollection::iterator
 Entry::insertOrUpdateInRecord(shared_ptr<Face> face, const Interest& interest)
 {
   auto it = std::find_if(m_inRecords.begin(), m_inRecords.end(),
-    [&face] (const InRecord& inRecord) { return inRecord.getFace() == face; });
+      [&face] (const InRecord& inRecord) {return inRecord.getFace() == face;});
   if (it == m_inRecords.end()) {
     m_inRecords.emplace_front(face);
     it = m_inRecords.begin();
@@ -145,7 +143,7 @@ InRecordCollection::const_iterator
 Entry::getInRecord(const Face& face) const
 {
   return std::find_if(m_inRecords.begin(), m_inRecords.end(),
-    [&face] (const InRecord& inRecord) { return inRecord.getFace().get() == &face; });
+      [&face] (const InRecord& inRecord) {return inRecord.getFace().get() == &face;});
 }
 
 void
@@ -158,7 +156,7 @@ OutRecordCollection::iterator
 Entry::insertOrUpdateOutRecord(shared_ptr<Face> face, const Interest& interest)
 {
   auto it = std::find_if(m_outRecords.begin(), m_outRecords.end(),
-    [&face] (const OutRecord& outRecord) { return outRecord.getFace() == face; });
+      [&face] (const OutRecord& outRecord) {return outRecord.getFace() == face;});
   if (it == m_outRecords.end()) {
     m_outRecords.emplace_front(face);
     it = m_outRecords.begin();
@@ -172,14 +170,14 @@ OutRecordCollection::const_iterator
 Entry::getOutRecord(const Face& face) const
 {
   return std::find_if(m_outRecords.begin(), m_outRecords.end(),
-    [&face] (const OutRecord& outRecord) { return outRecord.getFace().get() == &face; });
+      [&face] (const OutRecord& outRecord) {return outRecord.getFace().get() == &face;});
 }
 
 void
 Entry::deleteOutRecord(const Face& face)
 {
   auto it = std::find_if(m_outRecords.begin(), m_outRecords.end(),
-    [&face] (const OutRecord& outRecord) { return outRecord.getFace().get() == &face; });
+      [&face] (const OutRecord& outRecord) {return outRecord.getFace().get() == &face;});
   if (it != m_outRecords.end()) {
     m_outRecords.erase(it);
   }
@@ -191,7 +189,7 @@ Entry::hasUnexpiredOutRecords() const
   time::steady_clock::TimePoint now = time::steady_clock::now();
 
   return std::any_of(m_outRecords.begin(), m_outRecords.end(),
-    [&now] (const OutRecord& outRecord) { return outRecord.getExpiry() >= now; });
+      [&now] (const OutRecord& outRecord) {return outRecord.getExpiry() >= now;});
 }
 
 } // namespace pit

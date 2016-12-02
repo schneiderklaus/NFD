@@ -166,6 +166,11 @@ public: // OutRecord
 public:
   scheduler::EventId m_unsatisfyTimer;
   scheduler::EventId m_stragglerTimer;
+  
+  // PIT Entry marked as congested or NACKed.
+  bool m_congMark;
+  bool m_nackMark;
+
 
 private:
   shared_ptr<const Interest> m_interest;

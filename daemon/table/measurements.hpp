@@ -43,7 +43,8 @@ namespace measurements {
 
 /** \brief a predicate that accepts or rejects a \p Entry
  */
-typedef std::function<bool(const Entry&)> EntryPredicate;
+typedef std::function<bool
+(const Entry&)> EntryPredicate;
 
 /** \brief an \p EntryPredicate that accepts any \p Entry
  */
@@ -72,7 +73,7 @@ public:
 
 /** \brief represents the Measurements table
  */
-class Measurements : noncopyable
+class Measurements: noncopyable
 {
 public:
   explicit
@@ -102,16 +103,14 @@ public:
   /** \brief perform a longest prefix match for \p name
    */
   shared_ptr<measurements::Entry>
-  findLongestPrefixMatch(const Name& name,
-                         const measurements::EntryPredicate& pred =
-                             measurements::AnyEntry()) const;
+  findLongestPrefixMatch(const Name& name, const measurements::EntryPredicate& pred =
+      measurements::AnyEntry()) const;
 
   /** \brief perform a longest prefix match for \p pitEntry.getName()
    */
   shared_ptr<measurements::Entry>
-  findLongestPrefixMatch(const pit::Entry& pitEntry,
-                         const measurements::EntryPredicate& pred =
-                             measurements::AnyEntry()) const;
+  findLongestPrefixMatch(const pit::Entry& pitEntry, const measurements::EntryPredicate& pred =
+      measurements::AnyEntry()) const;
 
   /** \brief perform an exact match
    */
@@ -152,7 +151,12 @@ private:
 inline time::nanoseconds
 Measurements::getInitialLifetime()
 {
-  return time::seconds(4);
+  // TODO: A cleaner solution should use the extendLifetime() call 
+  // instead of using the fixed lifetime below!
+  
+  // Set initial lifetime to 300 seconds.
+  return time::seconds(300);
+//  return time::seconds(4);
 }
 
 inline size_t
