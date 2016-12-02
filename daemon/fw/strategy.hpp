@@ -27,6 +27,7 @@
 #define NFD_DAEMON_FW_STRATEGY_HPP
 
 #include "forwarder.hpp"
+#include "../../common.hpp"
 #include "strategy-registry.hpp"
 #include "table/measurements-accessor.hpp"
 

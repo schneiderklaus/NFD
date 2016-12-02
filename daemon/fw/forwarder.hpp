@@ -62,7 +62,8 @@ public:
   const ForwarderCounters&
   getCounters() const;
 
-public: // faces
+public:
+  // faces
   FaceTable&
   getFaceTable();
 
@@ -80,7 +81,8 @@ public: // faces
   void
   addFace(shared_ptr<Face> face);
 
-public: // forwarding entrypoints and tables
+public:
+  // forwarding entrypoints and tables
   void
   onInterest(Face& face, const Interest& interest);
 
@@ -108,7 +110,20 @@ public: // forwarding entrypoints and tables
   DeadNonceList&
   getDeadNonceList();
 
-public: // allow enabling ndnSIM content store (will be removed in the future)
+  void
+  setNodeId(uint32_t id)
+  {
+    m_nodeId = id;
+  }
+
+  uint32_t
+  getNodeId()
+  {
+    return m_nodeId;
+  }
+
+public:
+  // allow enabling ndnSIM content store (will be removed in the future)
   void
   setCsFromNdnSim(ns3::Ptr<ns3::ndn::ContentStore> cs);
 
@@ -126,84 +141,99 @@ public:
 PUBLIC_WITH_TESTS_ELSE_PRIVATE: // pipelines
   /** \brief incoming Interest pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onIncomingInterest(Face& inFace, const Interest& interest);
 
   /** \brief Content Store miss pipeline
-  */
+   */
   void
   onContentStoreMiss(const Face& inFace, shared_ptr<pit::Entry> pitEntry, const Interest& interest);
 
   /** \brief Content Store hit pipeline
-  */
+   */
   void
-  onContentStoreHit(const Face& inFace, shared_ptr<pit::Entry> pitEntry,
-                    const Interest& interest, const Data& data);
+  onContentStoreHit(const Face& inFace,
+      shared_ptr<pit::Entry> pitEntry,
+      const Interest& interest,
+      const Data& data);
 
   /** \brief Interest loop pipeline
    */
-  VIRTUAL_WITH_TESTS void
-  onInterestLoop(Face& inFace, const Interest& interest,
-                 shared_ptr<pit::Entry> pitEntry);
+  VIRTUAL_WITH_TESTS
+  void
+  onInterestLoop(Face& inFace, const Interest& interest, shared_ptr<pit::Entry> pitEntry);
 
   /** \brief outgoing Interest pipeline
    */
-  VIRTUAL_WITH_TESTS void
-  onOutgoingInterest(shared_ptr<pit::Entry> pitEntry, Face& outFace,
-                     bool wantNewNonce = false);
+  VIRTUAL_WITH_TESTS
+  void
+  onOutgoingInterest(shared_ptr<pit::Entry> pitEntry, Face& outFace, bool wantNewNonce = false);
 
   /** \brief Interest reject pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onInterestReject(shared_ptr<pit::Entry> pitEntry);
 
   /** \brief Interest unsatisfied pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onInterestUnsatisfied(shared_ptr<pit::Entry> pitEntry);
 
   /** \brief Interest finalize pipeline
    *  \param isSatisfied whether the Interest has been satisfied
    *  \param dataFreshnessPeriod FreshnessPeriod of satisfying Data
    */
-  VIRTUAL_WITH_TESTS void
-  onInterestFinalize(shared_ptr<pit::Entry> pitEntry, bool isSatisfied,
-                     const time::milliseconds& dataFreshnessPeriod = time::milliseconds(-1));
+  VIRTUAL_WITH_TESTS
+  void
+  onInterestFinalize(shared_ptr<pit::Entry> pitEntry,
+      bool isSatisfied,
+      const time::milliseconds& dataFreshnessPeriod = time::milliseconds(-1));
 
   /** \brief incoming Data pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onIncomingData(Face& inFace, const Data& data);
 
   /** \brief Data unsolicited pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onDataUnsolicited(Face& inFace, const Data& data);
 
   /** \brief outgoing Data pipeline
    */
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   onOutgoingData(const Data& data, Face& outFace);
 
-PROTECTED_WITH_TESTS_ELSE_PRIVATE:
-  VIRTUAL_WITH_TESTS void
+PROTECTED_WITH_TESTS_ELSE_PRIVATE:VIRTUAL_WITH_TESTS
+  void
   setUnsatisfyTimer(shared_ptr<pit::Entry> pitEntry);
 
-  VIRTUAL_WITH_TESTS void
-  setStragglerTimer(shared_ptr<pit::Entry> pitEntry, bool isSatisfied,
-                    const time::milliseconds& dataFreshnessPeriod = time::milliseconds(-1));
+  VIRTUAL_WITH_TESTS
+  void
+  setStragglerTimer(shared_ptr<pit::Entry> pitEntry,
+      bool isSatisfied,
+      const time::milliseconds& dataFreshnessPeriod = time::milliseconds(-1));
 
-  VIRTUAL_WITH_TESTS void
+  VIRTUAL_WITH_TESTS
+  void
   cancelUnsatisfyAndStragglerTimer(shared_ptr<pit::Entry> pitEntry);
 
   /** \brief insert Nonce to Dead Nonce List if necessary
    *  \param upstream if null, insert Nonces from all OutRecords;
    *                  if not null, insert Nonce only on the OutRecord of this face
    */
-  VIRTUAL_WITH_TESTS void
-  insertDeadNonceList(pit::Entry& pitEntry, bool isSatisfied,
-                      const time::milliseconds& dataFreshnessPeriod,
-                      Face* upstream);
+  VIRTUAL_WITH_TESTS
+  void
+  insertDeadNonceList(pit::Entry& pitEntry,
+      bool isSatisfied,
+      const time::milliseconds& dataFreshnessPeriod,
+      Face* upstream);
 
   /// call trigger (method) on the effective strategy of pitEntry
 #ifdef WITH_TESTS
@@ -221,18 +251,20 @@ private:
   FaceTable m_faceTable;
 
   // tables
-  NameTree       m_nameTree;
-  Fib            m_fib;
-  Pit            m_pit;
-  Cs             m_cs;
-  Measurements   m_measurements;
+  NameTree m_nameTree;
+  Fib m_fib;
+  Pit m_pit;
+  Cs m_cs;
+  Measurements m_measurements;
   StrategyChoice m_strategyChoice;
-  DeadNonceList  m_deadNonceList;
+  DeadNonceList m_deadNonceList;
   shared_ptr<NullFace> m_csFace;
 
   ns3::Ptr<ns3::ndn::ContentStore> m_csFromNdnSim;
 
   static const Name LOCALHOST_NAME;
+
+  uint32_t m_nodeId;
 
   // allow Strategy (base class) to enter pipelines
   friend class fw::Strategy;
