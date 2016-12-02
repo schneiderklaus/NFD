@@ -169,6 +169,7 @@ Strategy::sendInterest(shared_ptr<pit::Entry> pitEntry,
 inline void
 Strategy::rejectPendingInterest(shared_ptr<pit::Entry> pitEntry)
 {
+  std::cout << "Rejected pending Interests\n";
   m_forwarder.onInterestReject(pitEntry);
 }
 
