@@ -170,7 +170,7 @@ public:
   
   // PIT Entry marked as congested or NACKed.
   bool m_congMark;
-  bool m_nackMark;
+//  bool m_nackMark;
 
 
 private:

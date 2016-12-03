@@ -33,7 +33,7 @@ const Name Entry::LOCALHOST_NAME("ndn:/localhost");
 const Name Entry::LOCALHOP_NAME("ndn:/localhop");
 
 Entry::Entry(const Interest& interest)
-    : m_congMark(false), m_nackMark(false), m_interest(interest.shared_from_this())
+    : m_congMark(false), m_interest(interest.shared_from_this())
 {
 }
 
