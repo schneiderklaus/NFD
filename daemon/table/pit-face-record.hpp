@@ -26,7 +26,7 @@
 #ifndef NFD_DAEMON_TABLE_PIT_FACE_RECORD_HPP
 #define NFD_DAEMON_TABLE_PIT_FACE_RECORD_HPP
 
-#include "face/face.hpp"
+#include "../face/face.hpp"
 #include "strategy-info-host.hpp"
 
 namespace nfd {

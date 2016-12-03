@@ -26,7 +26,7 @@
 #ifndef NFD_DAEMON_FACE_FACE_HPP
 #define NFD_DAEMON_FACE_FACE_HPP
 
-#include "common.hpp"
+#include "../../common.hpp"
 #include "core/logger.hpp"
 #include "face-counters.hpp"
 
