@@ -26,6 +26,7 @@
 #ifndef NFD_DAEMON_TABLE_PIT_ENTRY_HPP
 #define NFD_DAEMON_TABLE_PIT_ENTRY_HPP
 
+#include "../../common.hpp"
 #include "pit-in-record.hpp"
 #include "pit-out-record.hpp"
 #include "core/scheduler.hpp"
@@ -56,26 +57,26 @@ enum DuplicateNonceWhere {
   DUPLICATE_NONCE_IN_SAME   = (1 << 0),
   /// in-record of other face
   DUPLICATE_NONCE_IN_OTHER  = (1 << 1),
-  /// out-record of same face
+  /// out-record of same face 
   DUPLICATE_NONCE_OUT_SAME  = (1 << 2),
   /// out-record of other face
   DUPLICATE_NONCE_OUT_OTHER = (1 << 3)
 };
 
-/** \brief represents a PIT entry
+/** \brief represents a PIT entry 
  */
 class Entry : public StrategyInfoHost, noncopyable
 {
 public:
   explicit
-  Entry(const Interest& interest);
+  Entry(const Interest& interest); 
 
-  const Interest&
+  const Interest& 
   getInterest() const;
 
   /** \return Interest Name
    */
-  const Name&
+  const Name& 
   getName() const;
 
   /** \brief decides whether Interest can be forwarded to face

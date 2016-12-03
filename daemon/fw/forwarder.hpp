@@ -26,13 +26,13 @@
 #ifndef NFD_DAEMON_FW_FORWARDER_HPP
 #define NFD_DAEMON_FW_FORWARDER_HPP
 
-#include "common.hpp"
+#include "../../common.hpp"
 #include "core/scheduler.hpp"
 #include "forwarder-counters.hpp"
 #include "face-table.hpp"
 #include "table/fib.hpp"
 #include "table/pit.hpp"
-#include "table/cs.hpp"
+#include "../table/cs.hpp"
 #include "table/measurements.hpp"
 #include "table/strategy-choice.hpp"
 #include "table/dead-nonce-list.hpp"
