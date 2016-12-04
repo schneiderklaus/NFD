@@ -117,7 +117,7 @@ public:
   }
 
   uint32_t
-  getNodeId()
+  getNodeId() const
   {
     return m_nodeId;
   }

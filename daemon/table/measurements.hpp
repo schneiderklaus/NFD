@@ -28,6 +28,7 @@
 
 #include "measurements-entry.hpp"
 #include "name-tree.hpp"
+#include "../../common.hpp"
 
 namespace nfd {
 
