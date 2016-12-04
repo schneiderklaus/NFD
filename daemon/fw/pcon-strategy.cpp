@@ -132,9 +132,6 @@ PconStrategy::afterReceiveInterest(const Face& inFace, const Interest& interest,
       percSum += measurementInfo->getforwPerc(n.getFace()->getId());
     }
   }
-  // If percSum == 0, there is likely a problem in the routing configuration,
-  // e.g. only the downstream has a forwPerc > 0.
-  assert(percSum > 0);
 
   if (eligbleFaces.size() < 1) {
     std::cout << "Blocked interest from face: " << inFace.getId()
@@ -149,6 +146,10 @@ PconStrategy::afterReceiveInterest(const Face& inFace, const Interest& interest,
 
   // More than 1 eligible face!
   else {
+    // If percSum == 0, there is likely a problem in the routing configuration,
+    // e.g. only the downstream has a forwPerc > 0.
+    assert(percSum > 0);
+
     // Write fw percentage to file
     if (time::steady_clock::now() >= m_lastFWWrite + TIME_BETWEEN_FW_WRITE) {
       m_lastFWWrite = time::steady_clock::now();
